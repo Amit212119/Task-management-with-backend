@@ -1,0 +1,44 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Build / Compiled files
+dist/
+build/
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# MongoDB dumps or data files (if any)
+dump/
+data/
+
+# Coverage reports
+coverage/
+
+# Uploaded files (optional)
+uploads/
+
+# Optional debug file output
+*.tgz
+
+# Yarn integrity
+.yarn-integrity
