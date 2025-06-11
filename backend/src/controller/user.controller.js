@@ -1,16 +1,16 @@
 import { User } from '../models/user.model.js';
 
 const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, phone } = req.body;
 
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !phone) {
     return res.status(400).json({ message: 'All fields required.' });
   }
 
   const existUser = await User.findOne({ email });
   if (existUser) return res.status(409).json({ message: 'User already exists.' });
 
-  const user = await User.create({ name, email, password });
+  const user = await User.create({ name, email, phone, password });
 
   res.status(201).json({ message: 'Registered successfully' });
 };
@@ -38,7 +38,7 @@ const loginUser = async (req, res) => {
 
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: false,
   };
 
   res
@@ -69,7 +69,7 @@ const logoutUser = async (req, res) => {
 
     const options = {
       httpOnly: true,
-      secure: true,
+      secure: false,
     };
 
     return res
@@ -83,4 +83,13 @@ const logoutUser = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser, logoutUser };
+const userProfile = (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'Not authenticated' });
+  }
+
+  const { name, email, phone } = req.user;
+  return res.status(200).json({ name, email, phone });
+};
+
+export { registerUser, loginUser, logoutUser, userProfile };

@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import './index.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { loginUser } from '../store/authSlice';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 const Login = () => {
   const initialValue = {
@@ -13,19 +12,8 @@ const Login = () => {
   };
   const [loginData, setLoginData] = useState(initialValue);
   const [error, setError] = useState({});
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated, error: loginError, message } = useSelector((state) => state.auth);
-  console.log('login', isAuthenticated);
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      toast.success(message, { position: 'top-center', autoClose: 1000 });
-      setTimeout(() => navigate('/'), 1000);
-    } else if (loginError) {
-      toast.error(loginError, { position: 'top-center', autoClose: 2000 });
-    }
-  }, [isAuthenticated, loginError, message, navigate]);
 
   const loginValidation = () => {
     let errors = {};
@@ -56,13 +44,29 @@ const Login = () => {
     setError((prevErr) => ({ ...prevErr, [name]: '' }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (loginValidation()) {
-      dispatch(loginUser(loginData));
+      try {
+        const response = await axios.post('http://localhost:4000/user/login', loginData);
+
+        if (response.status === 200 || response.status === 201) {
+          toast.success('Login Successful!', {
+            autoClose: 3000,
+            position: 'top-center',
+          });
+          setLoginData(initialValue);
+          setTimeout(() => {
+            navigate('/profile');
+          }, 3000);
+        }
+      } catch (error) {
+        const errMsg = error.response?.data?.message || 'Login failed!';
+        toast.error(errMsg);
+        console.error('Login error:', error);
+      }
     }
   };
-  const { isLoading } = useSelector((state) => state.auth);
 
   return (
     <div className='container'>
@@ -95,9 +99,8 @@ const Login = () => {
         <div>
           <button
             type='submit'
-            disabled={isLoading}
             className='loginSubmitButton'>
-            {isLoading ? 'Submitting' : 'Submit'}
+            Submit
           </button>
           <p className='loginParagraph'>
             Don&apos;t have an account?

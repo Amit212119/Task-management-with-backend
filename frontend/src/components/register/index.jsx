@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './index.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { registerUser } from '../store/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Registration = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const initialValue = {
@@ -16,16 +14,6 @@ const Registration = () => {
     phone: '',
     password: '',
   };
-  const { isAuthenticated, error: signupError, message } = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      toast.success(message, { position: 'top-center', autoClose: 1000 });
-      setTimeout(() => navigate('/'), 1000);
-    } else if (signupError) {
-      toast.error(signupError, { position: 'top-center', autoClose: 2000 });
-    }
-  }, [isAuthenticated, signupError, message, navigate]);
 
   const [signupData, setSignupData] = useState(initialValue);
 
@@ -83,10 +71,27 @@ const Registration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      dispatch(registerUser(signupData));
+      try {
+        const response = await axios.post('http://localhost:4000/user/register', signupData);
+
+        if (response.status === 201 || response.status === 200) {
+          toast.success('Registration Successful!', {
+            autoClose: 3000,
+            position: 'top-center'
+          });
+          setSignupData(initialValue);
+          setTimeout(() => {
+            navigate('/login');
+          }, 3000);
+        }
+      } catch (error) {
+        const errMsg = error.response?.data?.message || 'Registration failed!';
+        toast.error(errMsg);
+        console.error('Registration error:', error);
+      }
+      // dispatch(registerUser(signupData));
     }
   };
-  const { isLoading } = useSelector((state) => state.auth);
   return (
     <>
       <div className='parentContainer'>
@@ -148,9 +153,8 @@ const Registration = () => {
           <div className='btnGroup'>
             <button
               type='submit'
-              disabled={isLoading}
               className='signButton'>
-              {isLoading ? 'Signing up...' : 'Sign Up'}
+               Sign Up
             </button>
             <p className='signParagraph'>
               Already have an account?

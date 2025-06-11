@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-// 1. Define schema
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -18,6 +17,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Password is required'],
     },
+    phone: {
+      type: String,
+      required: [true, 'Name is required'],
+    },
     refreshToken: {
       type: String,
     },
@@ -27,7 +30,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// 2. Pre-save hook for password hashing
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   try {
@@ -38,18 +40,17 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-// 3. Method to compare password
 userSchema.methods.isCorrectPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-// 4. Method to generate Access Token
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
       _id: this._id,
       email: this.email,
       name: this.name,
+      phone: this.phone,
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
@@ -58,7 +59,6 @@ userSchema.methods.generateAccessToken = function () {
   );
 };
 
-// 5. Method to generate Refresh Token
 userSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
     {

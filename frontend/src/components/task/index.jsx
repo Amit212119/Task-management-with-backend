@@ -1,93 +1,64 @@
 import React, { useState } from 'react';
 import './index.css';
-import { logoutUser } from '../store/authSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { GiHamburgerMenu } from 'react-icons/gi';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
 
 const Task = () => {
-  const dispatch = useDispatch();
-  const profile = useSelector((state) => state.auth.user);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const [showMenu, setShowMenu] = useState(false);
-  const [showNav, setShowNav] = useState(false);
+  const [profile, setProfile] = useState(null);
+  console.log(profile, 'profile');
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    localStorage.removeItem('loginUser');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    try {
+      axios
+        .get('http://localhost:4000/user/profile', {
+          withCredentials: true, // ← explicitly send cookies
+        })
+        .then((res) => setProfile(res?.data));
+    } catch (error) {
+      console.log('Profile fetch error:', error);
+    }
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:4000/user/logout', {});
+
+      toast.success('Logged out successfully!!', {
+        autoClose: 3000,
+      });
+
+      setTimeout(() => {
+        navigate('/login');
+      }, 3000);
+    } catch (error) {
+      const errMsg = error.response?.data?.message || 'Logout failed!';
+      toast.error(errMsg);
+    }
   };
+
+  if (!profile) {
+    return <h2>Loading...</h2>;
+  }
   return (
     <>
       <nav className='navbar'>
         <h2>Welcome, {profile?.name || 'Profile'}</h2>
-
-        <ul className={`navDetails ${showNav ? 'mobileNav' : ''}`}>
-          <li>Home</li>
-          <li>About</li>
-          <li>Contact</li>
-        </ul>
-        {isAuthenticated && showNav ? (
-          <div className='mobileButton'>
-            <button
-              onClick={handleLogout}
-              className='mobileLogoutButton'>
-              LogOut
-            </button>
-
-            <Link
-              to='/updateProfile'
-              className='mobileUpdateProfile'>
-              Update Profile
-            </Link>
-          </div>
-        ) : (
-          showNav && (
-            <div className='mobileLoginButtonDiv'>
-              <Link
-                to='/login'
-                className='mobileLoginButton'>
-                Login
-              </Link>
-            </div>
-          )
-        )}
-        {isAuthenticated ? (
-          <div>
-            <button
-              className='profileButton'
-              onClick={() => setShowMenu(!showMenu)}>
-              {profile?.email}
-            </button>
-            {showMenu && (
-              <div className={'dropdown-menu'}>
-                <button
-                  onClick={handleLogout}
-                  className='logoutButton'>
-                  Logout
-                </button>
-                <Link
-                  to='/updateProfile'
-                  className='updateProfile'>
-                  Update Profile
-                </Link>
-              </div>
-            )}
-          </div>
-        ) : (
-          <Link
-            to='/login'
-            className='loginButton'>
-            Login
-          </Link>
-        )}
-        <button
-          className='menu-toggle'
-          onClick={() => setShowNav(!showNav)}>
-          <GiHamburgerMenu size={25} />
-        </button>
+        <div>
+          <button className='profileButton'>{profile?.email}</button>
+          <button
+            onClick={handleLogout}
+            className='logoutButton'>
+            Logout
+          </button>
+        </div>
       </nav>
       <section className='homeSection'>
-        {isAuthenticated && (
+        {profile && (
           <div className='DetailContainer'>
             <p className='nameHeading'>
               Welcome, <span className='name'>{profile?.name}</span>
@@ -100,6 +71,7 @@ const Task = () => {
             </p>
           </div>
         )}
+        <ToastContainer />
       </section>
     </>
   );

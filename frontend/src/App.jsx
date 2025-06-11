@@ -10,7 +10,7 @@ function App() {
     <Router>
       <Routes>
         <Route
-          path='/'
+          path='/profile'
           element={<Task />}
         />
         <Route
