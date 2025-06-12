@@ -8,8 +8,8 @@ const app = express();
 
 app.use(
   cors({
-    origin: 'http://localhost:5173', // your frontend origin
-    credentials: true, // ✅ This is CRITICAL
+    origin: 'http://localhost:5173', 
+    credentials: true, 
   })
 );
 
@@ -21,7 +21,11 @@ app.use(cookieParser());
 // routers
 
 import userRouter from "./router/user.router.js";
+import taskRouter from "./router/task.router.js";
+
 app.use("/user", userRouter);
+app.use("/task", taskRouter);
+
 
 
 

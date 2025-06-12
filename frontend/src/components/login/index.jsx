@@ -48,7 +48,9 @@ const Login = () => {
     e.preventDefault();
     if (loginValidation()) {
       try {
-        const response = await axios.post('http://localhost:4000/user/login', loginData);
+        const response = await axios.post('http://localhost:4000/user/login', loginData, {
+          withCredentials: true,
+        });
 
         if (response.status === 200 || response.status === 201) {
           toast.success('Login Successful!', {

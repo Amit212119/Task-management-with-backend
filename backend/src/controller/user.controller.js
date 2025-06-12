@@ -39,6 +39,7 @@ const loginUser = async (req, res) => {
   const options = {
     httpOnly: true,
     secure: false,
+    sameSite: 'Lax',
   };
 
   res
@@ -70,6 +71,7 @@ const logoutUser = async (req, res) => {
     const options = {
       httpOnly: true,
       secure: false,
+      sameSite: 'lax',
     };
 
     return res
