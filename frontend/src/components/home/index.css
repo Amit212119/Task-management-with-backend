@@ -1,0 +1,57 @@
+.navbar {
+    background-color: #2f3542;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.navbar h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.rightNav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+
+.logoutButton {
+    background-color: rgb(160, 160, 160);
+    border: none;
+    color: orange;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s ease;
+}
+
+.profileButton {
+    border: none;
+    color: orange;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.userName {
+    color: orange;
+}
+
+.logoutButton:hover {
+    background-color: orange;
+    color: white;
+}
+
+.profileButton:hover {
+    background-color: orange;
+    color: white;
+}
+

@@ -1,17 +1,17 @@
 import React from 'react';
 import './App.css';
-import Login from './components/login';
+import Login from './components/login/index.jsx';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Registration from './components/register';
-import Task from './components/task';
+import Registration from './components/register/index.jsx';
+import Home from './components/home/index.jsx';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route
-          path='/profile'
-          element={<Task />}
+          path='/'
+          element={<Home />}
         />
         <Route
           path='/login'

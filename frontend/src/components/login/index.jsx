@@ -59,7 +59,7 @@ const Login = () => {
           });
           setLoginData(initialValue);
           setTimeout(() => {
-            navigate('/profile');
+            navigate('/');
           }, 3000);
         }
       } catch (error) {

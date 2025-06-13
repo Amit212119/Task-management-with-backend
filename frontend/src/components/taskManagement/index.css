@@ -1,0 +1,137 @@
+
+
+/* Navbar */
+
+
+.pageHeading {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+} 
+/* Task Container */
+.taskContainer {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Task Form */
+.taskForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.taskForm input {
+    flex: 1;
+    min-width: 140px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.taskForm button {
+    padding: 10px 18px;
+    background-color: #1e90ff;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.taskForm button:hover {
+    background-color: #0077ff;
+}
+
+/* Task List */
+.taskList {
+    list-style: none;
+    padding: 0;
+}
+
+.taskItem {
+    background-color: #f1f2f6;
+    margin-bottom: 0.75rem;
+    padding: 12px 16px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.taskItem:hover {
+    background-color: #dfe4ea;
+}
+
+.taskItem span {
+    flex-grow: 1;
+    cursor: pointer;
+}
+
+.taskItem.completed span {
+    text-decoration: line-through;
+    opacity: 0.6;
+    color: #2f3542;
+}
+
+.taskItem button {
+    margin-left: 10px;
+    background-color: #ff6b81;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.taskItem button:hover {
+    background-color: #ff4757;
+}
+
+.taskCheckbox {
+    margin-right: 10px;
+    transform: scale(1.2);
+    cursor: pointer; }
+.title{
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .taskForm {
+        flex-direction: column;
+    }
+
+    .taskItem {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
